@@ -11,6 +11,7 @@ import matplotlib.patches as mpatches
 ############################### env method : you don't need to know them تغییر دادن
 
 
+
 def modify_rewards(next_state, custom_map, hole_reward, goal_reward, move_reward):
     custom_map_flaten = get_flaten_custom_map(custom_map)
     state_type = custom_map_flaten[next_state]
