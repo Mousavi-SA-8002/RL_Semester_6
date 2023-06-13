@@ -8,7 +8,7 @@ import matplotlib.colors as mcolors
 import matplotlib.patches as mpatches
 
 
-############################### env method : you don't need to know them
+############################### env method : you don't need to know them تغییر دادن
 
 
 def modify_rewards(next_state, custom_map, hole_reward, goal_reward, move_reward):
