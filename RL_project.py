@@ -375,16 +375,34 @@ def policy_improvement(env, policy, V, discount_factor):
 # This algorithm allows you to estimate the state values of a given policy by sampling episodes and
 # calculating the average returns(in first visit of a state in each episode)
 def first_visit_mc_prediction(env, policy, num_episodes, gamma):
-    # initilize
     V = np.zeros(env.observation_space.n)
     N = np.zeros(env.observation_space.n)
 
-    # loop in range num_episodes(for each episode)
-    # for i_episode in range(num_episodes):
+    for i_episode in range(num_episodes):
+        states_visited = []
+        rewards = []
+        G = 0
 
-    # generate episode w.r.t policy
+        state = env.reset()
+        done = False
 
-    # loop for each step of episode , t= T-1, T-2, ..., 0
+        while not done:
+            action = policy[state]
+            next_state, reward, done, _ = env.step(action)
+
+            states_visited.append(state)
+            rewards.append(reward)
+
+            state = next_state
+
+        # Calculate returns and update state values
+        for t in range(len(states_visited) - 1, -1, -1):
+            G = gamma * G + rewards[t]
+
+            if states_visited[t] not in states_visited[:t]:
+                state = states_visited[t]
+                N[state] += 1
+                V[state] = V[state] + (1 / N[state]) * (G - V[state])
 
     return V
 
@@ -392,16 +410,29 @@ def first_visit_mc_prediction(env, policy, num_episodes, gamma):
 # This algorithm allows you to estimate the state values of a given policy by sampling episodes and
 # calculating the average returns(in every visit of a state)
 def every_visit_mc_prediction(env, policy, num_episodes, gamma):
-    # initilize
     V = np.zeros(env.observation_space.n)
     N = np.zeros(env.observation_space.n)
 
-    # loop in range num_episodes(for each episode)
-    # for i_episode in range(num_episodes):
+    for i_episode in range(num_episodes):
+        states_visited = []
+        rewards = []
 
-    # generate episode w.r.t policy
+        state = env.reset()
+        done = False
 
-    # loop for each step of episode , t= T-1, T-2, ..., 0
+        while not done:
+            action = policy[state]
+            next_state, reward, done, _ = env.step(action)
+            states_visited.append(state)
+            rewards.append(reward)
+            state = next_state
+
+        G = 0
+        for t in range(len(states_visited) - 1, -1, -1):
+            G = gamma * G + rewards[t]
+            state = states_visited[t]
+            N[state] += 1
+            V[state] += (G - V[state]) / N[state]
 
     return V
 
