@@ -473,17 +473,17 @@ custom_map_8 = ["HFFSFFH",
 custom_map_9 = ["GFSFFFFH"]
 #############################
 if __name__ == "__main__":
-    map = custom_map_3
+    map = custom_map_7
     env = gym.make("FrozenLake-v1", render_mode="human", desc=map, is_slippery=False)
     # env = gym.make("FrozenLake-v1", desc=map, is_slippery=True)
     env = ModifyRewards(
-        env, custom_map=map, hole_reward=-3, goal_reward=7, move_reward=2
+        env, custom_map=map, hole_reward=-0.1, goal_reward=5, move_reward=-0.1
     )
     # env.reset()
     # env.render()
 
     V, policy = policy_iteration(env, map, theta=0.0001, discount_factor=0.9)
-    # plot_state_value(V, map)
+    plot_state_value(V, map)
     # plot_policy_arrows(policy, map)
     # plot_policy_terminal(policy, map)
     do_policy(env, policy, episdoes=5)
